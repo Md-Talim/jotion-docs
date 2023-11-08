@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import useScrollTop from '@/hooks/useScrollTop';
-import { cn } from '@/lib/utils';
-import Logo from './Logo';
-import ThemeToggle from './ThemeToggle';
+import useScrollTop from "@/hooks/useScrollTop";
+import { cn } from "@/lib/utils";
+import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const scrolled = useScrollTop();
@@ -11,12 +11,12 @@ const Navbar = () => {
   return (
     <nav
       className={cn(
-        'z-50 bg-background fixed top-0 flex items-center w-full p-6',
-        scrolled && 'border-b shadow-sm',
+        "fixed top-0 z-50 flex w-full items-center bg-background p-6",
+        scrolled && "border-b shadow-sm",
       )}
     >
       <Logo />
-      <div className="flex items-center justify-between md:justify-end gap-x-2 text-muted-foreground w-full md:ml-auto">
+      <div className="flex w-full items-center justify-between gap-x-2 text-muted-foreground md:ml-auto md:justify-end">
         Login
         <ThemeToggle />
       </div>

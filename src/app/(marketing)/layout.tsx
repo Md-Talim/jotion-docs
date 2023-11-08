@@ -1,4 +1,4 @@
-import Navbar from './Navbar';
+import Navbar from "./Navbar";
 
 const LandingPageLayout = ({ children }: { children: React.ReactNode }) => (
   <div className="h-full">

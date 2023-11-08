@@ -3,6 +3,7 @@
 import useScrollTop from '@/hooks/useScrollTop';
 import { cn } from '@/lib/utils';
 import Logo from './Logo';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const scrolled = useScrollTop();
@@ -17,6 +18,7 @@ const Navbar = () => {
       <Logo />
       <div className="flex items-center justify-between md:justify-end gap-x-2 text-muted-foreground w-full md:ml-auto">
         Login
+        <ThemeToggle />
       </div>
     </nav>
   );

@@ -6,9 +6,9 @@ import useScrollTop from "@/hooks/useScrollTop";
 import { cn } from "@/lib/utils";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 import { useConvexAuth } from "convex/react";
+import Link from "next/link";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
-import Link from "next/link";
 
 const Navbar = () => {
   const { isLoading, isAuthenticated } = useConvexAuth();

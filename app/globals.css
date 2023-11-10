@@ -2,6 +2,12 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+html,
+body,
+:root {
+  min-height: 100vh;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -72,5 +78,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .resetting {
+    @apply transition-all duration-300 ease-in-out;
   }
 }

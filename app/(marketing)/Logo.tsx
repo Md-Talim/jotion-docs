@@ -9,10 +9,20 @@ const font = Poppins({
 
 const Logo = () => (
   <div className="hidden items-center gap-x-2 md:flex">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcSet="/logo-dark.svg" />
-      <Image src="/logo.svg" alt="Jotion Logo" width={40} height={40} />
-    </picture>
+    <Image
+      src="/logo-dark.svg"
+      alt="Jotion Logo"
+      width={40}
+      height={40}
+      className="hidden dark:block"
+    />
+    <Image
+      src="/logo.svg"
+      alt="Jotion Logo"
+      width={40}
+      height={40}
+      className="dark:hidden"
+    />
     <p className={cn("font-semibold", font.className)}>Jotion</p>
   </div>
 );

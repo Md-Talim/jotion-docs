@@ -23,12 +23,12 @@ const Navbar = () => {
     >
       <Logo />
       <div className="flex w-full items-center justify-between gap-x-2 text-muted-foreground md:ml-auto md:justify-end">
-        {isLoading && <Spinner size="sm" />}
+        {isLoading && <Spinner />}
 
         {/* When not authenticated and not loading show log in sign-up buttons */}
         {!isAuthenticated && !isLoading && (
           <>
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" afterSignInUrl="/documents">
               <Button variant="ghost" size="sm">
                 Log in
               </Button>

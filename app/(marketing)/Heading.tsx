@@ -40,7 +40,11 @@ const Heading = () => {
         </Button>
       )}
 
-      {isLoading && <Spinner size="icon" />}
+      {isLoading && (
+        <div className="flex items-center justify-center">
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };

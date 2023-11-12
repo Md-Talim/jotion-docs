@@ -1,6 +1,8 @@
 "use client";
 
+import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
+import { useQuery } from "convex/react";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
@@ -13,6 +15,7 @@ const Navigation = () => {
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
   const navbarRef = useRef<ElementRef<"div">>(null);
+  const documents = useQuery(api.documents.get);
 
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
@@ -122,8 +125,13 @@ const Navigation = () => {
         <div>
           <UserItem />
         </div>
+
         <div className="mt-4">
-          <p>Documents</p>
+          {/* All documents */}
+
+          {documents?.map((document) => (
+            <p key={document._id}>{document.title}</p>
+          ))}
         </div>
 
         {/* Resize */}

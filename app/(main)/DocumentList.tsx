@@ -10,9 +10,9 @@ import { useState } from "react";
 import Item from "./Item";
 
 interface Props {
-  parentDocumentId?: Id<"documents">;
-  level?: number;
   data?: Doc<"documents">[];
+  level?: number;
+  parentDocumentId?: Id<"documents">;
 }
 
 const DocumentList = ({ parentDocumentId, level = 0 }: Props) => {

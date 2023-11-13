@@ -8,29 +8,29 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface Props {
-  label: string;
-  onClick: () => void;
+  active?: boolean;
+  documentIcon?: string;
+  expanded?: boolean;
   icon: LucideIcon;
   id?: Id<"documents">;
-  documentIcon?: string;
-  active?: boolean;
-  expanded?: boolean;
   isSearch?: boolean;
+  label: string;
   level?: number;
+  onClick: () => void;
   onExpand?: () => void;
 }
 
 const Item = ({
-  id,
-  documentIcon,
   active,
-  isSearch,
+  documentIcon,
   expanded,
-  label,
-  onExpand,
-  onClick,
   icon: Icon,
+  id,
+  isSearch,
+  label,
   level,
+  onClick,
+  onExpand,
 }: Props) => {
   const create = useMutation(api.documents.create);
   const router = useRouter();

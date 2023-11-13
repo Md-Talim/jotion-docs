@@ -1,7 +1,11 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { useMutation } from "convex/react";
 import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface Props {
   label: string;
@@ -26,8 +30,33 @@ const Item = ({
   onExpand,
   onClick,
   icon: Icon,
+  level,
 }: Props) => {
+  const create = useMutation(api.documents.create);
+  const router = useRouter();
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
+
+  const handleCreateNestedDoc = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
+
+    const promise = create({ title: "Untitled", parentDocument: id }).then(
+      (documentId) => {
+        if (!expanded) {
+          onExpand?.();
+        }
+
+        router.push(`/documents/${documentId}`);
+      },
+    );
+
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Failed to create a new note.",
+    });
+  };
 
   const handleExpand = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -40,9 +69,9 @@ const Item = ({
     <div
       onClick={onClick}
       role="button"
-      style={{ padding: "12px" }}
+      style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
       className={cn(
-        "group flex min-h-[28px] w-full items-center py-1 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5",
+        "group flex min-h-[28px] w-full items-center py-2 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5",
         active && "bg-primary/5 text-primary",
       )}
     >
@@ -73,6 +102,19 @@ const Item = ({
         <kbd className="pointer-events-none ml-auto inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
           <span className="text-xs">⌘</span>K
         </kbd>
+      )}
+
+      {/* Plus icon for adding a new page inside the current page */}
+      {!!id && (
+        <div className="ml-auto flex items-center gap-x-2">
+          <div
+            role="button"
+            onClick={handleCreateNestedDoc}
+            className="rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+          >
+            <Plus className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </div>
       )}
     </div>
   );

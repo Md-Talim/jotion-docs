@@ -2,11 +2,21 @@
 
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
-import { useQuery } from "convex/react";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import { useMutation } from "convex/react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  Plus,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
+import DocumentList from "./DocumentList";
+import Item from "./Item";
 import UserItem from "./UserItem";
 
 const Navigation = () => {
@@ -15,7 +25,8 @@ const Navigation = () => {
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
   const navbarRef = useRef<ElementRef<"div">>(null);
-  const documents = useQuery(api.documents.get);
+
+  const create = useMutation(api.documents.create);
 
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
@@ -102,6 +113,16 @@ const Navigation = () => {
     document.addEventListener("mouseup", handleMouseUp);
   };
 
+  const handleCreate = () => {
+    const promise = create({ title: "Untitled" });
+
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Failed to create a new note.",
+    });
+  };
+
   return (
     <>
       <aside
@@ -124,14 +145,15 @@ const Navigation = () => {
 
         <div>
           <UserItem />
+          <Item icon={Settings} label="Settings" onClick={() => {}} />
+          <Item isSearch icon={Search} label="Search" onClick={() => {}} />
+          <Item icon={PlusCircle} label="New Page" onClick={handleCreate} />
         </div>
 
         <div className="mt-4">
           {/* All documents */}
-
-          {documents?.map((document) => (
-            <p key={document._id}>{document.title}</p>
-          ))}
+          <DocumentList />
+          <Item onClick={handleCreate} icon={Plus} label="Add a page" />
         </div>
 
         {/* Resize */}

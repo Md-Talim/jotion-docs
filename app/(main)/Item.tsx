@@ -142,8 +142,11 @@ const Item = ({
         <div className="ml-auto flex items-center gap-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-              <div role="button" className="action-btn">
-                <MoreHorizontal className="action-btn__icon" />
+              <div
+                role="button"
+                className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+              >
+                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
               </div>
             </DropdownMenuTrigger>
 
@@ -167,9 +170,9 @@ const Item = ({
           <div
             role="button"
             onClick={handleCreateNestedDoc}
-            className="action-btn"
+            className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
           >
-            <Plus className="action-btn__icon" />
+            <Plus className="h-4 w-4 text-muted-foreground" />
           </div>
         </div>
       )}

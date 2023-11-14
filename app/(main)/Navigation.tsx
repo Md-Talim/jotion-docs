@@ -1,8 +1,7 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
+import useCreateDocument from "@/hooks/useCreateDocument";
 import { cn } from "@/lib/utils";
-import { useMutation } from "convex/react";
 import {
   ChevronsLeft,
   MenuIcon,
@@ -13,7 +12,6 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
 import DocumentList from "./DocumentList";
 import Item from "./Item";
@@ -25,8 +23,6 @@ const Navigation = () => {
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
   const navbarRef = useRef<ElementRef<"div">>(null);
-
-  const create = useMutation(api.documents.create);
 
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
@@ -113,15 +109,7 @@ const Navigation = () => {
     document.addEventListener("mouseup", handleMouseUp);
   };
 
-  const handleCreate = () => {
-    const promise = create({ title: "Untitled" });
-
-    toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "New note created!",
-      error: "Failed to create a new note.",
-    });
-  };
+  const handleCreate = useCreateDocument();
 
   return (
     <>

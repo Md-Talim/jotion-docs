@@ -86,3 +86,13 @@ body,
     @apply transition-all duration-300 ease-in-out;
   }
 }
+
+@layer components {
+  .action-btn {
+    @apply rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600;
+  }
+
+  .action-btn__icon {
+    @apply h-4 w-4 text-muted-foreground;
+  }
+}

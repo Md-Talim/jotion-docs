@@ -1,9 +1,24 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/clerk-react";
 import { useMutation } from "convex/react";
-import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  LucideIcon,
+  MoreHorizontal,
+  Plus,
+  Trash,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -32,9 +47,27 @@ const Item = ({
   onClick,
   onExpand,
 }: Props) => {
-  const create = useMutation(api.documents.create);
+  const { user } = useUser();
   const router = useRouter();
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
+  const create = useMutation(api.documents.create);
+  const archive = useMutation(api.documents.archive);
+
+  const handleArchive = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
+
+    if (!id) return;
+
+    const promise = archive({ id });
+
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Error while archiving note.",
+    });
+  };
 
   const handleCreateNestedDoc = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -107,12 +140,36 @@ const Item = ({
       {/* Plus icon for adding a new page inside the current page */}
       {!!id && (
         <div className="ml-auto flex items-center gap-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+              <div role="button" className="action-btn">
+                <MoreHorizontal className="action-btn__icon" />
+              </div>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              className="w-60"
+              align="start"
+              side="right"
+              forceMount
+            >
+              <DropdownMenuItem onClick={handleArchive}>
+                <Trash className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+              <div className="p-2 text-xs text-muted-foreground">
+                Last edited by: {user?.fullName}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div
             role="button"
             onClick={handleCreateNestedDoc}
-            className="rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+            className="action-btn"
           >
-            <Plus className="h-4 w-4 text-muted-foreground" />
+            <Plus className="action-btn__icon" />
           </div>
         </div>
       )}

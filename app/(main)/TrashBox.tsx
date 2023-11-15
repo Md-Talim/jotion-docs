@@ -4,14 +4,16 @@ import Spinner from "@/components/Spinner";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { Search } from "lucide-react";
+import { useMutation, useQuery } from "convex/react";
+import { Search, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const TrashBox = () => {
   const router = useRouter();
   const archivedDocuments = useQuery(api.documents.getArchieved);
+  const restore = useMutation(api.documents.restore);
   const [search, setSearch] = useState("");
 
   const handleClick = (documentId: Id<"documents">) => {
@@ -21,6 +23,21 @@ const TrashBox = () => {
   const filteredDocuments = archivedDocuments?.filter((document) =>
     document.title.toLocaleLowerCase().includes(search),
   );
+
+  const handleRestore = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    documentId: Id<"documents">,
+  ) => {
+    event.stopPropagation();
+
+    const promise = restore({ documentId });
+
+    toast.promise(promise, {
+      loading: "Restoring document...",
+      success: "Added to the document list!",
+      error: "Error restoring document!",
+    });
+  };
 
   // if there are no documents show a spinner
   if (archivedDocuments === undefined) {
@@ -57,6 +74,17 @@ const TrashBox = () => {
             className="flex w-full items-center justify-between rounded-sm text-sm text-primary hover:bg-primary/5"
           >
             <span className="truncate pl-2">{document.title}</span>
+
+            {/* Undo button */}
+            <div className="flex items-center gap-x-2">
+              <div
+                role="button"
+                onClick={(e) => handleRestore(e, document._id)}
+                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+              >
+                <Undo className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
           </div>
         ))}
       </div>

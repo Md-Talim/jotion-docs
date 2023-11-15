@@ -31,7 +31,7 @@ interface Props {
   isSearch?: boolean;
   label: string;
   level?: number;
-  onClick: () => void;
+  onClick?: () => void;
   onExpand?: () => void;
 }
 

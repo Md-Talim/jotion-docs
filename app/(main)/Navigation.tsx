@@ -1,7 +1,14 @@
 "use client";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { api } from "@/convex/_generated/api";
 import useCreateDocument from "@/hooks/useCreateDocument";
 import { cn } from "@/lib/utils";
+import { useQuery } from "convex/react";
 import {
   ChevronsLeft,
   MenuIcon,
@@ -9,13 +16,15 @@ import {
   PlusCircle,
   Search,
   Settings,
+  Trash,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import DocumentList from "./DocumentList";
 import Item from "./Item";
 import UserItem from "./UserItem";
+import { Id } from "@/convex/_generated/dataModel";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -142,6 +151,19 @@ const Navigation = () => {
           {/* All documents */}
           <DocumentList />
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
+
+          {/* Archived documents */}
+          <Popover>
+            <PopoverTrigger className="mt-4 w-full">
+              <Item label="Trash" icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-72 p-0"
+              side={isMobile ? "bottom" : "right"}
+            >
+              <TrashBox />
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Resize */}
@@ -170,6 +192,32 @@ const Navigation = () => {
         </nav>
       </div>
     </>
+  );
+};
+
+const TrashBox = () => {
+  const router = useRouter();
+  const archivedDocuments = useQuery(api.documents.getArchieved);
+
+  const handleClick = (documentId: Id<"documents">) => {
+    router.push(`/documents/${documentId}`);
+  };
+
+  return (
+    <div>
+      <div className="mt-2 px-1 pb-1">
+        {archivedDocuments?.map((document) => (
+          <div
+            key={document._id}
+            role="button"
+            onClick={() => handleClick(document._id)}
+            className="flex w-full items-center justify-between rounded-sm text-sm text-primary hover:bg-primary/5"
+          >
+            <span className="truncate pl-2">{document.title}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

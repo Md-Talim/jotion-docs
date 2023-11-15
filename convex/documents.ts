@@ -113,3 +113,24 @@ export const create = mutation({
     return document;
   },
 });
+
+export const getArchieved = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("User not authenticated.");
+    }
+
+    const userId = identity.subject;
+
+    const archivedDocuments = await ctx.db
+      .query("documents")
+      .withIndex("by_user_parent", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("isArchived"), true))
+      .order("desc")
+      .collect();
+
+    return archivedDocuments;
+  },
+});

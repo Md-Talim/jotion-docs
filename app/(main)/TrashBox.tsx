@@ -1,19 +1,68 @@
 "use client";
 
 import Spinner from "@/components/Spinner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { Search, Undo } from "lucide-react";
+import { Search, Trash, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+
+const ConfirmDialog = ({
+  children,
+  onConfirm,
+}: {
+  children: React.ReactNode;
+  onConfirm: () => void;
+}) => {
+  const handleConfirm = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
+    onConfirm();
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger onClick={(e) => e.stopPropagation()} asChild>
+        {children}
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={(event) => handleConfirm(event)}>
+            Just remove it!
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
 
 const TrashBox = () => {
   const router = useRouter();
   const archivedDocuments = useQuery(api.documents.getArchieved);
   const restore = useMutation(api.documents.restore);
+  const remove = useMutation(api.documents.remove);
   const [search, setSearch] = useState("");
 
   const handleClick = (documentId: Id<"documents">) => {
@@ -36,6 +85,16 @@ const TrashBox = () => {
       loading: "Restoring document...",
       success: "Added to the document list!",
       error: "Error restoring document!",
+    });
+  };
+
+  const handleRemove = (documentId: Id<"documents">) => {
+    const promise = remove({ documentId });
+
+    toast.promise(promise, {
+      loading: "Remving document from the database...",
+      success: "Completely removed from the database!",
+      error: "Error removing document!",
     });
   };
 
@@ -75,8 +134,9 @@ const TrashBox = () => {
           >
             <span className="truncate pl-2">{document.title}</span>
 
-            {/* Undo button */}
+            {/* Action buttons */}
             <div className="flex items-center gap-x-2">
+              {/* Button to restore the document */}
               <div
                 role="button"
                 onClick={(e) => handleRestore(e, document._id)}
@@ -84,6 +144,16 @@ const TrashBox = () => {
               >
                 <Undo className="h-4 w-4 text-muted-foreground" />
               </div>
+
+              {/* Button to completely remove the element from database. */}
+              <ConfirmDialog onConfirm={() => handleRemove(document._id)}>
+                <div
+                  role="button"
+                  className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                >
+                  <Trash className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </ConfirmDialog>
             </div>
           </div>
         ))}

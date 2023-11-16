@@ -194,3 +194,32 @@ export const restore = mutation({
     return restoredDocument;
   },
 });
+
+export const remove = mutation({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("User not authenticated.");
+    }
+
+    const userId = identity.subject;
+
+    const documentToRemove = await ctx.db.get(args.documentId);
+
+    if (!documentToRemove) {
+      throw new Error("Document not found.");
+    }
+
+    if (documentToRemove?.userId !== userId) {
+      throw new Error("User is not authorized to delete this document.");
+    }
+
+    const deletedDoc = await ctx.db.delete(args.documentId);
+
+    return deletedDoc;
+  },
+});

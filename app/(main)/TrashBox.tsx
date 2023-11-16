@@ -1,17 +1,7 @@
 "use client";
 
+import ConfirmModal from "@/components/ConfirmModal";
 import Spinner from "@/components/Spinner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -20,43 +10,6 @@ import { Search, Trash, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-
-const ConfirmDialog = ({
-  children,
-  onConfirm,
-}: {
-  children: React.ReactNode;
-  onConfirm: () => void;
-}) => {
-  const handleConfirm = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    event.stopPropagation();
-    onConfirm();
-  };
-
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger onClick={(e) => e.stopPropagation()} asChild>
-        {children}
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={(event) => handleConfirm(event)}>
-            Just remove it!
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-};
 
 const TrashBox = () => {
   const router = useRouter();
@@ -146,14 +99,14 @@ const TrashBox = () => {
               </div>
 
               {/* Button to completely remove the element from database. */}
-              <ConfirmDialog onConfirm={() => handleRemove(document._id)}>
+              <ConfirmModal onConfirm={() => handleRemove(document._id)}>
                 <div
                   role="button"
                   className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                 >
                   <Trash className="h-4 w-4 text-muted-foreground" />
                 </div>
-              </ConfirmDialog>
+              </ConfirmModal>
             </div>
           </div>
         ))}

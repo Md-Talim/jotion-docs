@@ -24,10 +24,12 @@ import Item from "./Item";
 import UserItem from "./UserItem";
 import TrashBox from "./TrashBox";
 import useSearch from "@/hooks/useSearch";
+import useSettings from "@/hooks/useSettings";
 
 const Navigation = () => {
   const pathname = usePathname();
   const search = useSearch();
+  const settings = useSettings();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -142,7 +144,11 @@ const Navigation = () => {
 
         <div>
           <UserItem />
-          <Item icon={Settings} label="Settings" onClick={() => {}} />
+          <Item
+            icon={Settings}
+            label="Settings"
+            onClick={settings.handleOpen}
+          />
           <Item
             isSearch
             icon={Search}

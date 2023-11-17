@@ -1,10 +1,11 @@
 "use client";
 
+import SearchCommand from "@/components/SearchCommand";
+import SettingsModal from "@/components/SettingsModal";
 import Spinner from "@/components/Spinner";
 import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
 import Navigation from "./Navigation";
-import SearchCommand from "@/components/SearchCommand";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isLoading, isAuthenticated } = useConvexAuth();
@@ -25,6 +26,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex h-screen dark:bg-[#1F1F1F]">
       <Navigation />
       <SearchCommand />
+      <SettingsModal />
       <main className="h-full flex-1 overflow-y-auto">{children}</main>
     </div>
   );

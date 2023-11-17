@@ -8,7 +8,7 @@ import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 import { useConvexAuth } from "convex/react";
 import Link from "next/link";
 import Logo from "./Logo";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Navbar = () => {
   const { isLoading, isAuthenticated } = useConvexAuth();

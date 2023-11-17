@@ -35,7 +35,7 @@ const SettingsModal = () => {
           <ThemeToggle />
         </div>
 
-        <section className="mt-4 bg-red-50 p-2">
+        <section className="mt-4 rounded-sm border bg-red-50 p-2 dark:bg-transparent">
           <DialogHeader className="mb-3">
             <h2 className="text-lg font-medium">Danger Zone</h2>
           </DialogHeader>

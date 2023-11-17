@@ -244,3 +244,24 @@ export const getAllDocuments = query({
     return allDocuments;
   },
 });
+
+export const removeAllDocuments = mutation({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("User is not authenticated.");
+    }
+
+    const userId = identity.subject;
+
+    const allDocuments = await ctx.db
+      .query("documents")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .collect();
+
+    allDocuments.forEach(async (document) => {
+      await ctx.db.delete(document._id);
+    });
+  },
+});

@@ -1,21 +1,16 @@
 "use client";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import useCreateDocument from "@/hooks/useCreateDocument";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, Plus, Trash } from "lucide-react";
+import { ChevronsLeft, MenuIcon, Plus } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import ActionItems from "./ActionItems";
+import ArchivedDocuments from "./ArchivedDocuments";
 import DocumentList from "./DocumentList";
 import Item from "./Item";
 import Navbar from "./Navbar";
-import TrashBox from "./TrashBox";
-import ActionItems from "./ActionItems";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -139,18 +134,7 @@ const Navigation = () => {
           <DocumentList />
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
 
-          {/* Archived documents */}
-          <Popover>
-            <PopoverTrigger className="mt-4 w-full">
-              <Item label="Trash" icon={Trash} />
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-72 p-0"
-              side={isMobile ? "bottom" : "right"}
-            >
-              <TrashBox />
-            </PopoverContent>
-          </Popover>
+          <ArchivedDocuments />
         </div>
 
         {/* Resize */}

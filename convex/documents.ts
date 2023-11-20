@@ -1,6 +1,6 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
+import { mutation, query } from "./_generated/server";
 
 export const archive = mutation({
   args: {
@@ -263,5 +263,41 @@ export const removeAllDocuments = mutation({
     allDocuments.forEach(async (document) => {
       await ctx.db.delete(document._id);
     });
+  },
+});
+
+export const getDocumentById = query({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    const document = await ctx.db.get(args.documentId);
+
+    if (!document) {
+      throw new Error("Document not found.");
+    }
+
+    /**
+     * if the document is published and not archived
+     * don't check anything &
+     * return the document
+     */
+    if (document.isPublished && !document?.isArchived) {
+      return document;
+    }
+
+    if (!identity) {
+      throw new Error("User not authenticated.");
+    }
+
+    const userId = identity.subject;
+
+    if (document.userId !== userId) {
+      throw new Error("User not authorized.");
+    }
+
+    return document;
   },
 });

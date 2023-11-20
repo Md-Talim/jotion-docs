@@ -73,7 +73,7 @@ const DocumentList = ({ parentDocumentId, level = 0 }: Props) => {
             icon={FileIcon}
             label={document.title}
             level={level}
-            onClick={() => {}}
+            onClick={() => handleRedirect(document._id)}
             onExpand={() => handleExpand(document._id)}
           />
 

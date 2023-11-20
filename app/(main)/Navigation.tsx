@@ -7,31 +7,19 @@ import {
 } from "@/components/ui/popover";
 import useCreateDocument from "@/hooks/useCreateDocument";
 import { cn } from "@/lib/utils";
-import {
-  ChevronsLeft,
-  MenuIcon,
-  Plus,
-  PlusCircle,
-  Search,
-  Settings,
-  Trash,
-} from "lucide-react";
+import { ChevronsLeft, MenuIcon, Plus, Trash } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import DocumentList from "./DocumentList";
 import Item from "./Item";
-import UserItem from "./UserItem";
-import TrashBox from "./TrashBox";
-import useSearch from "@/hooks/useSearch";
-import useSettings from "@/hooks/useSettings";
 import Navbar from "./Navbar";
+import TrashBox from "./TrashBox";
+import ActionItems from "./ActionItems";
 
 const Navigation = () => {
   const pathname = usePathname();
   const params = useParams();
-  const search = useSearch();
-  const settings = useSettings();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -144,21 +132,7 @@ const Navigation = () => {
           <ChevronsLeft className="h-6 w-6" />
         </button>
 
-        <div>
-          <UserItem />
-          <Item
-            icon={Settings}
-            label="Settings"
-            onClick={settings.handleOpen}
-          />
-          <Item
-            isSearch
-            icon={Search}
-            label="Search"
-            onClick={search.handleOpen}
-          />
-          <Item icon={PlusCircle} label="New Page" onClick={handleCreate} />
-        </div>
+        <ActionItems />
 
         <div className="mt-4">
           {/* All documents */}

@@ -3,10 +3,18 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, MoreHorizontal, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Title from "./Title";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { useUser } from "@clerk/clerk-react";
 
 interface Props {
   isCollapsed: boolean;
@@ -14,10 +22,14 @@ interface Props {
 }
 
 const Navbar = ({ isCollapsed, onResetWidth }: Props) => {
+  const { user } = useUser();
   const params = useParams();
+  const router = useRouter();
   const document = useQuery(api.documents.getDocumentById, {
     documentId: params.documentId as Id<"documents">,
   });
+
+  const archive = useMutation(api.documents.archive);
 
   if (document === undefined) {
     return <p>Loading...</p>;
@@ -26,6 +38,24 @@ const Navbar = ({ isCollapsed, onResetWidth }: Props) => {
   if (document === null) {
     return null;
   }
+
+  const handleArchive = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
+
+    if (!document._id) return;
+
+    const promise = archive({ id: document._id });
+
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Error while archiving note.",
+    });
+
+    router.push("/documents");
+  };
 
   return (
     <>
@@ -41,6 +71,32 @@ const Navbar = ({ isCollapsed, onResetWidth }: Props) => {
 
         <div className="items center flex w-full justify-between">
           <Title initialData={document} />
+
+          <div className="flex items-center gap-x-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="ghost">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                className="w-60"
+                align="end"
+                alignOffset={8}
+                forceMount
+              >
+                <DropdownMenuItem onClick={handleArchive}>
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <div className="p-2 text-xs text-muted-foreground">
+                  Last edited by: {user?.fullName}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </nav>
     </>

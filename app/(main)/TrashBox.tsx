@@ -5,6 +5,7 @@ import Spinner from "@/components/Spinner";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import useRestoreDocument from "@/hooks/useRestoreDocument";
 import { useMutation, useQuery } from "convex/react";
 import { Search, Trash, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -13,8 +14,8 @@ import { toast } from "sonner";
 
 const TrashBox = () => {
   const router = useRouter();
+  const handleRestore = useRestoreDocument();
   const archivedDocuments = useQuery(api.documents.getArchieved);
-  const restore = useMutation(api.documents.restore);
   const remove = useMutation(api.documents.remove);
   const [search, setSearch] = useState("");
 
@@ -25,21 +26,6 @@ const TrashBox = () => {
   const filteredDocuments = archivedDocuments?.filter((document) =>
     document.title.toLocaleLowerCase().includes(search),
   );
-
-  const handleRestore = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    documentId: Id<"documents">,
-  ) => {
-    event.stopPropagation();
-
-    const promise = restore({ documentId });
-
-    toast.promise(promise, {
-      loading: "Restoring document...",
-      success: "Added to the document list!",
-      error: "Error restoring document!",
-    });
-  };
 
   const handleRemove = (documentId: Id<"documents">) => {
     const promise = remove({ documentId });

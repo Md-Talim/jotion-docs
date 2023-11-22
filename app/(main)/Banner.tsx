@@ -1,27 +1,18 @@
 import ConfirmModal from "@/components/ConfirmModal";
 import { Button } from "@/components/ui/button";
-import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import useRemoveDocument from "@/hooks/useRemoveDocument";
 import useRestoreDocument from "@/hooks/useRestoreDocument";
-import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 const Banner = ({ documentId }: { documentId: Id<"documents"> }) => {
   const router = useRouter();
 
   const handleRestore = useRestoreDocument();
-  const remove = useMutation(api.documents.remove);
+  const removeDocument = useRemoveDocument();
 
-  const handleRemove = () => {
-    const promise = remove({ documentId: documentId });
-
-    toast.promise(promise, {
-      loading: "Deleting note...",
-      success: "Note deleted!",
-      error: "Failed to delete note.",
-    });
-
+  const handleConfirm = () => {
+    removeDocument(documentId);
     router.push("/documents");
   };
 
@@ -37,7 +28,7 @@ const Banner = ({ documentId }: { documentId: Id<"documents"> }) => {
       >
         Restore page
       </Button>
-      <ConfirmModal onConfirm={handleRemove}>
+      <ConfirmModal onConfirm={handleConfirm}>
         <Button
           variant="outline"
           size="sm"

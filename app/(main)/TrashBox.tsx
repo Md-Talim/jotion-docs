@@ -5,18 +5,18 @@ import Spinner from "@/components/Spinner";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import useRemoveDocument from "@/hooks/useRemoveDocument";
 import useRestoreDocument from "@/hooks/useRestoreDocument";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { Search, Trash, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
 
 const TrashBox = () => {
   const router = useRouter();
   const handleRestore = useRestoreDocument();
+  const handleRemove = useRemoveDocument();
   const archivedDocuments = useQuery(api.documents.getArchieved);
-  const remove = useMutation(api.documents.remove);
   const [search, setSearch] = useState("");
 
   const handleClick = (documentId: Id<"documents">) => {
@@ -26,16 +26,6 @@ const TrashBox = () => {
   const filteredDocuments = archivedDocuments?.filter((document) =>
     document.title.toLocaleLowerCase().includes(search),
   );
-
-  const handleRemove = (documentId: Id<"documents">) => {
-    const promise = remove({ documentId });
-
-    toast.promise(promise, {
-      loading: "Remving document from the database...",
-      success: "Completely removed from the database!",
-      error: "Error removing document!",
-    });
-  };
 
   // if there are no documents show a spinner
   if (archivedDocuments === undefined) {

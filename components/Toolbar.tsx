@@ -20,6 +20,7 @@ const Toolbar = ({ initialData, preview }: Props) => {
   const [value, setValue] = useState(initialData.title);
 
   const update = useMutation(api.documents.update);
+  const removeIcon = useMutation(api.documents.removeIcon);
 
   const enableInput = () => {
     if (preview) return;
@@ -65,7 +66,7 @@ const Toolbar = ({ initialData, preview }: Props) => {
             </p>
           </IconPicker>
           <Button
-            onClick={() => {}}
+            onClick={() => removeIcon({ documentId: initialData._id })}
             variant="outline"
             size="icon"
             className="rounded-full text-xs text-muted-foreground opacity-0 transition group-hover/icon:opacity-100"

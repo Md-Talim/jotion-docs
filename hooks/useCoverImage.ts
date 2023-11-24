@@ -11,8 +11,8 @@ type CoverImageStore = {
 const useCoverImage = create<CoverImageStore>((set) => ({
   url: undefined,
   isOpen: false,
-  handleOpen: () => set({ isOpen: true }),
-  handleClose: () => set({ isOpen: false }),
+  handleOpen: () => set({ isOpen: true, url: undefined }),
+  handleClose: () => set({ isOpen: false, url: undefined }),
   handleReplace: (url) => set({ isOpen: true, url }),
 }));
 

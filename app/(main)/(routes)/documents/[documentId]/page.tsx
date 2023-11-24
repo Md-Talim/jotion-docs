@@ -22,7 +22,7 @@ const DocumentPage = ({ params }: Props) => {
   }
 
   return (
-    <div className="">
+    <div className="pb-40 pt-5">
       <Cover url={document.coverImage} />
       <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
         <Toolbar initialData={document} />

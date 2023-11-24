@@ -6,6 +6,7 @@ import Spinner from "@/components/Spinner";
 import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
 import Navigation from "./Navigation";
+import CoverImageModal from "@/components/CoverImageModal";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isLoading, isAuthenticated } = useConvexAuth();
@@ -27,6 +28,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       <Navigation />
       <SearchCommand />
       <SettingsModal />
+      <CoverImageModal />
       <main className="h-full flex-1 overflow-y-auto">{children}</main>
     </div>
   );

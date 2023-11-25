@@ -59,7 +59,7 @@ const Toolbar = ({ initialData, preview }: Props) => {
   };
 
   return (
-    <div className="group relative pl-[54px]">
+    <div className="group relative">
       {!!initialData.icon && !preview && (
         <div className="group/icon flex items-center gap-x-2 pt-6">
           <IconPicker onChange={handleIconSelect}>

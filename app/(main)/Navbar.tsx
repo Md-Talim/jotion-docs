@@ -20,7 +20,14 @@ const Navbar = ({ isCollapsed, onResetWidth }: Props) => {
   });
 
   if (document === undefined) {
-    return <p>Loading...</p>;
+    return (
+      <nav className="flex w-full items-center justify-between bg-background px-3 py-2 dark:bg-[#1f1f1f]">
+        <Title.Skeleton />
+        <div className="flex items-center gap-x-2">
+          <Menu.Skeleton />
+        </div>
+      </nav>
+    );
   }
 
   if (document === null) {

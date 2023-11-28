@@ -120,7 +120,7 @@ const Toolbar = ({ initialData, preview }: Props) => {
       ) : (
         <div
           onClick={enableInput}
-          className="break-words pb-[11.5px] text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF]"
+          className="break-words pb-[11.5px] text-3xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF] md:text-4xl lg:text-5xl"
         >
           {initialData.title}
         </div>

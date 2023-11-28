@@ -24,7 +24,7 @@ const Publish = ({ initialData }: Props) => {
   const [copied, setCopied] = useState(false);
 
   const update = useMutation(api.documents.update);
-  const url = `${origin}/preview/${initialData._id}`;
+  const url = `${origin}/shared/${initialData._id}`;
 
   const handlePublish = () => {
     setIsSubmitting(true);

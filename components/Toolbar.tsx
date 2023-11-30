@@ -59,7 +59,7 @@ const Toolbar = ({ initialData, preview }: Props) => {
   };
 
   return (
-    <div className="group relative pl-[56px]">
+    <div className="group relative pl-[56px] max-sm:pr-[28px]">
       {!!initialData.icon && !preview && (
         <div className="group/icon flex items-center gap-x-2 pt-6">
           <IconPicker onChange={handleIconSelect}>
@@ -97,7 +97,7 @@ const Toolbar = ({ initialData, preview }: Props) => {
         )}
         {!initialData.coverImage && !preview && (
           <Button
-            className="text-x s text-muted-foreground"
+            className="text-xs text-muted-foreground"
             onClick={coverImage.handleOpen}
             variant="outline"
             size="sm"
@@ -115,7 +115,7 @@ const Toolbar = ({ initialData, preview }: Props) => {
           onKeyDown={handleKeyDown}
           value={value}
           onChange={(e) => handleChange(e.target.value)}
-          className="resize-none break-words bg-transparent text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF]"
+          className="resize-none break-words bg-transparent text-3xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF] md:text-4xl lg:text-5xl"
         />
       ) : (
         <div
